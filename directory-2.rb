@@ -33,6 +33,7 @@ def print_menu
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
   puts "5. Enter initial to search for specific student(s)"
+  puts "6. Print names that are shorter than 12 characters"
   puts "9. Exit"
 end
 
@@ -89,16 +90,13 @@ def process(selection)
     load_students
   when "5"
     search_with_initial
+  when "6"
+    print_short_names
   when "9"
     exit
   else
     puts "I don't know what you mean, try again"
   end
-end
-
-def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
 end
 
 def search_with_initial
@@ -116,12 +114,29 @@ def search_with_initial
   end
 end
 
-
-def print_students_list
-  @students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+def print_short_names
+  @students.each do |student|
+    if student[:name].length < 12
+      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    end
   end
 end
+
+
+def print_header
+  puts "The students of Villains Academy"
+  puts "-------------"
+end
+
+
+def print_students_list
+  index = 0
+  while index < @students.length
+    puts "#{index + 1}. #{@students[index][:name]} (#{@students[index][:cohort]} cohort)"
+    index += 1
+  end
+end
+
 
 def print_footer
   puts "Overall, we have #{@students.count} great students"
