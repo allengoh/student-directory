@@ -11,7 +11,8 @@ def input_students
   while !name.empty? do
     #add the student hash to the array
     @students << {name: name, cohort: :november}
-    puts "Now we have #{@students.count} students"
+    plural = @students.length > 1 ? "s" : ""
+    puts "Now we have #{@students.count} student#{plural}"
     #get another name from the user
     name = STDIN.gets.chomp
   end
@@ -31,6 +32,7 @@ def print_menu
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
+  puts "5. Enter initial to search for specific student(s)"
   puts "9. Exit"
 end
 
@@ -61,6 +63,7 @@ def load_students(filename = "students.csv")
   file.close
 end
 
+
 def try_load_students
   filename = ARGV.first #first argument from the command line
   return if filename.nil? #get out of the method if it isn't given
@@ -84,6 +87,8 @@ def process(selection)
     save_students
   when "4"
     load_students
+  when "5"
+    search_with_initial
   when "9"
     exit
   else
@@ -95,6 +100,22 @@ def print_header
   puts "The students of Villains Academy"
   puts "-------------"
 end
+
+def search_with_initial
+  puts "Enter the first letter of the name?"
+  @specific_letter = gets.chomp
+  while @specific_letter.length > 1
+    puts "You have entered more than one character, please try again."
+    @specific_letter = gets.chomp
+  end
+  
+  @students.each do |student|
+    if student[:name][0] == @specific_letter
+      puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    end
+  end
+end
+
 
 def print_students_list
   @students.each_with_index do |student, index|
